@@ -11,38 +11,32 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Calendar, CircleDollarSign, Home, Inbox, Search, Settings } from "lucide-react"
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 const items = [
     {
-        title: "Home",
-        url: "#",
+        title: "Workspace",
+        url: "/dashboard",
         icon: Home,
     },
     {
-        title: "Inbox",
-        url: "#",
+        title: "Design",
+        url: "/design",
         icon: Inbox,
     },
     {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
-    },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
+        title: "Credits",
+        url: "/credits",
+        icon: CircleDollarSign,
     },
 ]
 
 export function AppSidebar() {
+    const path = usePathname()
+    console.log(path);
+    
     return (
         <Sidebar>
             <SidebarHeader>
@@ -72,9 +66,9 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
+            {/* <SidebarFooter>
                 <h2 className='p-2 text-gray-400 text-sm'>Copyright @Tubeguruji</h2>
-            </SidebarFooter>
+            </SidebarFooter> */}
         </Sidebar>
     )
 }
