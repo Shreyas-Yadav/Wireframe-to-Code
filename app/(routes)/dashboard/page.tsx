@@ -1,8 +1,12 @@
 import React from 'react'
+import ImageUpload from './_components/ImageUpload'
 
 function Dashboard() {
     return (
-        <div>Dashboard</div>
+        <div>
+            <ImageUpload />
+        </div>
+        
     )
 }
 
