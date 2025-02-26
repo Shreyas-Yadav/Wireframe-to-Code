@@ -8,6 +8,8 @@ import {
 } from "@codesandbox/sandpack-react";
 import Constants from "@/data/Constants";
 export default function CodeEditor({ codeResp, isReady }: any) {
+  console.log("CodeEditor: codeResp =", codeResp);
+  console.log("CodeEditor: isReady =", isReady);
   return (
     <div>
       {isReady ? (
