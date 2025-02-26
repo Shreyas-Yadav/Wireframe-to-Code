@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CloudUpload, Sparkle, X } from "lucide-react";
+import { CloudUpload, Loader2Icon, Sparkle, X } from "lucide-react";
 import Image from "next/image";
 import {
   Select,
@@ -15,24 +15,25 @@ import {
 import React, { useState } from "react";
 import { storage } from "@/configs/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
+import { uuid } from "drizzle-orm/pg-core";
+import { useAuthContext } from "@/app/provider";
+import { useRouter } from "next/navigation";
+import Constants from "@/data/Constants";
+
 
 function ImageUpload() {
-  const AiModelList = [
-    {
-      name: "gemini",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg",
-    },
-    {
-      name: "llama",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg",
-    },
-
-  ];
+ 
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [file, setFile] = useState<any>();
   const [model,setModel] = useState<string>();
   const [desc,setDesc] = useState<string>();
+  const [loading,setLoading] = useState<boolean>(false);
+
+  const user = useAuthContext();
+  const router = useRouter();
 
   const OnImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.files);
@@ -51,16 +52,26 @@ function ImageUpload() {
         alert('Please fill all the fields');
         return;
     }
-
+    setLoading(true);
     const fileName = Date.now() + ".png";
     const imageRef = ref(storage,"wireframe_images/" + fileName);
     await uploadBytes(imageRef,file)
     .then(resp => console.log('Image Uploaded'));
     
     const imageUrl = await getDownloadURL(imageRef);
-    console.log(imageUrl);
-    
-    
+
+    const uid = uuidv4();
+
+    const result = await axios.post('/api/wireframe-to-code',{
+        uid: uid,
+        desc:desc,
+        model:model,
+        imageUrl:imageUrl,
+        email: user.user?.email
+    });
+    console.log(result.data);
+    setLoading(false);
+    router.push(`/view-code/${uid}`);
   };
 
   return (
@@ -108,7 +119,7 @@ function ImageUpload() {
               <SelectValue placeholder="Select Model" />
             </SelectTrigger>
             <SelectContent>
-              {AiModelList.map((model, index) => (
+              {Constants.AiModelList.map((model, index) => (
                 <SelectItem className="mt-2" key={index} value={model.name}>
                     <div className="flex items-center gap-2">
                         <Image
@@ -132,9 +143,9 @@ function ImageUpload() {
         </div>
       </div>
       <div className="mt-5 flex justify-center">
-        <Button onClick={OnConvertToCodeButtonClick}>
-          {" "}
-          <Sparkle></Sparkle> Convert to Code
+        <Button disabled={loading} onClick={OnConvertToCodeButtonClick}>
+          {loading ? <Loader2Icon className="animate-spin"/> : <Sparkle/> }
+          Convert to Code
         </Button>
       </div>
     </div>
