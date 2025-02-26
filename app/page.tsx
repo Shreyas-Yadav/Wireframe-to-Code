@@ -7,6 +7,7 @@ import { auth } from "@/configs/firebaseConfig";
 import ProfileAvatar from "./_components/ProfileAvatar";
 import { useAuthContext } from "./provider";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   // const user = auth?.currentUser;
@@ -14,7 +15,13 @@ export default function Home() {
   const user = useAuthContext();
   console.log(user?.user)
 
-  
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user?.user?.email) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
 
 
   return (

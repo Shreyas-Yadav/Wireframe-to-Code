@@ -23,11 +23,6 @@ const items = [
         url: "/design",
         icon: Inbox,
     },
-    {
-        title: "Credits",
-        url: "/credits",
-        icon: CircleDollarSign,
-    },
 ]
 
 export function AppSidebar() {
