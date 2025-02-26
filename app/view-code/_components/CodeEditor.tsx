@@ -49,7 +49,9 @@ export default function CodeEditor({ codeResp, isReady }: any) {
           }}
           options={{
             externalResources: ["https://cdn.tailwindcss.com"],
+            
           }}
+          
         >
           <SandpackLayout>
             <SandpackCodeEditor showTabs={true} style={{ height: "70vh" }} />
