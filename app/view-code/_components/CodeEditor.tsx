@@ -25,7 +25,6 @@ export default function CodeEditor({ codeResp, isReady }: any) {
             showLineNumbers: true,
             showTabs: true,
             editorHeight: 550,
-            showInlineErrors:true, 
           }}
           files={{
             "/App.js": `${codeResp}`,
